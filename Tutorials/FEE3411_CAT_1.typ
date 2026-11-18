@@ -2,24 +2,10 @@
 #import "@preview/zap:0.6.0"
 #import "@preview/cetz:0.5.1": canvas, draw
 #import "@preview/cetz-plot:0.1.4": plot
+#show: assignment.with(
+  assignment-name: "Penance",
+)
 
-#let intersection(plotA, plotB, style: (stroke: red + 2pt)) = {
-  import draw: *
-  let dataA = plotA.first().data
-  let dataB = plotB.first().data
-
-  plot.annotate({
-    hide({
-      intersections("i", line(..plotA.first().data), line(..plotB.first().data))
-    })
-    for-each-anchor("i", name => {
-      circle("i." + name, radius: 0.01, fill: red)
-    })
-  })
-
-  plotA
-  plotB
-}
 
 #numed-question(
   lead: [
@@ -79,7 +65,7 @@
       Linearizing
       $
         i_(R)(t) & = i_(R_(0)) + lr(frac(dif i_(R)(t), dif v_(R)(t))|)_(v_(R)(t) = v_(R_0)) (v_(R)(t) - v_(R_(0))) \
-                 & = 1 + 0.02 times v_R (v_(R)(t) - v_(R_(0))) \
+                 & = 1 + 0.02 times v_(R_(0)) (v_(R)(t) - v_(R_(0))) \
                  & = 1 + 0.2 (v_(R)(t) - 10) \
                  & = -1 + 0.2 v_(R)(t)
       $
@@ -189,12 +175,14 @@
 
       Response to the unit step function:
       $
-        Y(s) & = s G(s) \
+        Y(s) & =frac(G(s), s) \
              & = e^(-0.2s) (frac(4, s(s + 2))) \
              & = e^(-0.2s) (frac(A, s) + frac(B, s + 2)) \
              & = e^(-0.2s) (2 dot frac(1, s) - 2 dot frac(1, s + 2)) \
         y(t) & = 2(1 - e^(-2(t - 0.2)))u(t - 0.2)
       $
+      The transfer function contains a pure time delay term $e^{-0.2s}$, which is a transcendental function, not a rational polynomial.
+      Therefore, it has an infinite number of poles and cannot be represented as a finite set of poles and zeros on a standard pole-zero map.
     ],
   )
 
@@ -285,17 +273,15 @@
               y-max: 2,
               x-label: $t$,
               {
-                intersection(
-                  plot.add(
-                    domain: (0, 1),
-                    x => (2 * (1 - calc.pow(calc.e, -2 * (x - 0.2))) * heaviside(x - 0.2)),
-                    label: $y(t)$,
-                  ),
-                  plot.add(
-                    domain: (0, 1),
-                    x => (2 - 3 * calc.pow(calc.e, -2 * x) + calc.pow(calc.e, -10 * x)),
-                    label: $y_(a)(t)$,
-                  ),
+                plot.add(
+                  domain: (0, 1),
+                  x => (2 * (1 - calc.pow(calc.e, -2 * (x - 0.2))) * heaviside(x - 0.2)),
+                  label: $y(t)$,
+                )
+                plot.add(
+                  domain: (0, 1),
+                  x => (2 - 3 * calc.pow(calc.e, -2 * x) + calc.pow(calc.e, -10 * x)),
+                  label: $y_(a)(t)$,
                 )
               },
             )
@@ -371,7 +357,7 @@
             line((rel: (45deg, sum-radius), to: pos), (rel: (-135deg, sum-radius), to: pos), stroke: 0.5pt)
             // Signs
             content((rel: (-0.52, x * 0.22), to: pos), text(size: 8pt)[$#signs.at(0)$])
-            content((rel: (0.22, x * -0.52), to: pos), text(size: 8pt)[$#signs.at(1)$])
+            content((rel: (x * 0.22, x * -0.52), to: pos), text(size: 8pt)[$#signs.at(1)$])
           }
 
           // Helper for Rectangular Block
@@ -482,18 +468,157 @@
       Show intermediate steps.
     ],
     answer: answer-box()[
+      With $T_d = 0$ the inner loop reduces to:
+      $
+        frac(frac(K, J s^2 + B s), 1 + K_(t)s frac(K, J s^2 + B s)) \
+        frac(K, J s^2 + (B + K K_(t))s)
+      $
+
+      Including the outer loop:
+      $
+        frac(frac(K_(p) K, J s^2 + (B + K K_(t))s), 1 + frac(K_(p) K, J s^2 + (B + K K_(t))s))\
+        frac(K_(p) K, J s^2 + (B + K K_(t))s + K_(p) K)
+      $
+
+      This yields:
+      $
+        frac(Theta(s), Theta_(r)(s)) = frac(K_(p) K, J s^2 + (B + K K_(t))s + K_(p) K)
+      $
 
     ],
   )
 
   #sub-question(
     [
-      With $theta_(r) = 0$, find $frac(Theta(s), Theta_(r)(s))$ draw the signal-flow graph and use Mason's gain formula to find $frac(Theta(s), T_d(s))$.
+      With $theta_(r) = 0$, find $frac(Theta(s), T_(d)(s))$ draw the signal-flow graph and use Mason's gain formula to find $frac(Theta(s), T_d(s))$.
       Hence find the steady-state angular deflection caused by a constant disturbance torque of $0.5 " N m"$
     ],
     ref: <3-c>,
     answer: answer-box()[
 
+      #align(center)[
+        #canvas({
+          import draw: *
+
+          // Styling defaults
+          set-style(
+            line: (stroke: 0.9pt + black),
+            mark: (fill: black),
+          )
+
+          let node-r = 0.08
+          let navy = rgb("#243b63")
+
+          // Main line node coordinates
+          let r = (0.0, 0.0) // theta_r(s)
+          let x1 = (2.4, 0.0) // e_theta(s)
+          let x2 = (4.8, 0.0) // e_a(s)
+          let x3 = (7.2, 0.0) // T_net(s)
+          let x4 = (10.2, 0.0) // theta(s) before output branch
+          let c = (12.4, 0.0) // theta(s) output
+          let td = (4.8, 2.2) // T_d(s) disturbance input
+
+          // Main Line Direct Connections
+          line(r, x1, mark: (end: "stealth"))
+          content((1.2, 0.32), $1$)
+
+          line(x1, x2, mark: (end: "stealth"))
+          content((3.6, 0.32), $K_p$)
+
+          line(x2, x3, mark: (end: "stealth"))
+          content((6.0, 0.32), $K$)
+
+          line(x3, x4, mark: (end: "stealth"))
+          content((8.7, 0.45), $frac(1, J s^2 + B s)$)
+
+
+          // Disturbance Input Path -1 (top arc from T_d to T_net)
+          bezier(
+            td,
+            x3,
+            (5.6, 2.2),
+            (6.8, 1.4),
+            mark: (end: "stealth"),
+            stroke: 0.9pt + rgb("#8c3a1e"),
+          )
+          content((6.4, 1.95), text(fill: rgb("#8c3a1e"))[$-1$])
+          content((4.35, 2.2), text(fill: navy)[$T_d (s)$])
+
+          // Inner Velocity Feedback -K_t s (bottom arc from x4 to e_a)
+          bezier(
+            x4,
+            x2,
+            (9.2, -1.6),
+            (5.8, -1.6),
+            mark: (end: "stealth"),
+            stroke: 0.9pt + rgb("#1e4a38"),
+          )
+          content((7.5, -1.45), text(fill: rgb("#1e4a38"))[$-K_t s$])
+
+          // Outer Position Feedback -1 (bottom arc from x4 to e_theta)
+          bezier(
+            x4,
+            x1,
+            (9.0, -3.1),
+            (3.8, -3.1),
+            mark: (end: "stealth"),
+            stroke: 0.9pt + rgb("#1e7f38"),
+          )
+          content((6.4, -2.55), text(fill: rgb("#1e7f38"))[$-1$])
+
+          // Node Points
+          for pt in (r, x1, x2, x3, x4, td) {
+            circle(pt, radius: node-r, fill: navy, stroke: none)
+          }
+
+          // Node Name Labels Below
+          content((0.0, -3.1), text(fill: navy)[$theta_r (s)$])
+          content((2.4, -3.1), text(fill: navy)[$e_theta (s)$])
+          content((4.8, -3.1), text(fill: navy)[$e_a (s)$])
+          content((7.2, -3.1), text(fill: navy)[$T_("net") (s)$])
+          content((10.2, -3.1), text(fill: navy)[$theta (s)$])
+        })
+      ]
+      Loop 1:
+      $
+        frac(-K_(t) K s, J s^2 + B s)
+      $
+
+      Loop 2:
+      $
+        frac(-K_(p) K, J s^2 + B s)
+      $
+
+      There are no non-touching loops present hence:
+      $
+        Delta & = 1 - (frac(-K_(t) K s, J s^2 + B s) - frac(K_(p) K, J s^2 + B s)) \
+              & = 1 + frac(K_(t) K s, J s^2 + B s) + frac(K_(p) K, J s^2 + B s)
+      $
+
+      The feed forward path is:
+      $
+        P = frac(-1, J s^2 + B s)
+      $
+
+      Both loops touch this path.
+      The transfer function is hence:
+      $
+        frac(Theta(s), T_(d)(s)) & = frac(frac(-1, J s^2 + B s), 1 + frac(K_(t) K s, J s^2 + B s) + frac(K_(p) K, J s^2 + B s)) \
+                                 & = frac(-1, J s^2 + (B + K_(t)K)s + K_(p)K)
+      $
+
+      Finding the angle deflection caused by disturbance torque:
+      $
+        Theta(s) & = 0.5/s times frac(-1, 0.2 s^2 + (0.4 + 0.6 times 2)s + 5 times 2) \
+                 & = 0.5/s times frac(-5, s^2 + 8s + 50) \
+      $
+
+      Final value theorem:
+      $
+        theta_"ss" & = lim_(s -> 0) s times 0.5/s times frac(-5, s^2 + 8s + 50) \
+                   & = frac(0.5 times -5, 50) \
+                   & = -0.05 " rad"
+      $
     ],
   )
 
@@ -503,6 +628,26 @@
       Comment on what the tachogenerator does.
     ],
     answer: answer-box()[
+      With the tachogenerator disconnected, its feedback path(or is branch) is removed:
+      $
+        Theta(s) & = 0.5/s times frac(-1, 0.2 s^2 + (0.4 + 0 times 2)s + 5 times 2) \
+                 & = 0.5/s times frac(-5, s^2 + 2s + 50) \
+      $
+
+      The original damping ratio is:
+      $
+        zeta & = frac(8, 2 times sqrt(50)) \
+             & = #calc.round(8 / (2 * calc.sqrt(50)), digits: 3)
+      $
+
+      With the tachogenerator removed:
+      $
+        zeta_("new") & = frac(2, 2 times sqrt(50)) \
+                     & = #calc.round(2 / (2 * calc.sqrt(50)), digits: 3)
+      $
+
+      The new steady state value however does not change since it is not dependent on the tachogenerator.
+      The tachogenerator purely increased the damping ratio reducing overshoot and decreasing the settling time not the value it settles at.
 
     ],
   )
@@ -523,7 +668,7 @@
   numed-question(
     lead: [
       A unity-feedback loop contains a plant whose transfer function $G(s)$ is unknown.
-      A step of $2 "V"$ is applied to the reference input at $t = 0$ and the output is recorded; the record is reproduced in Figure 2.
+      A step of $2 "V"$ is applied to the reference input at $t = 0$ and the output is recorded; the record is reproduced in @q4-figure.
       #align(center)[
         #figure(
           canvas({
@@ -561,7 +706,7 @@
               },
             )
           }),
-        )
+        )<q4-figure>
       ]
     ],
   )[
@@ -662,7 +807,7 @@
                      & approx #calc.round(4 / (znew * wnnew), digits: 3) "s"
         $
 
-        The new gain causes the damping factor to reduce significantly from #calc.round(z, digits: 3) to #calc.round(znew, digits: 3) this causes the overshoot to increase dramatically from #os\%.
+        The new gain causes the damping factor to reduce significantly from #calc.round(z, digits: 3) to #calc.round(znew, digits: 3) which causes the overshoot to increase dramatically from #os\%.
         The settling time remains the same, this can be attributed to $zeta omega_n = zeta_("new") omega_(n, "new")$.
         In reality however, the settling time for the doubled-gain system will be much longer due to the lower damping ratio.
         This shows the pitfall of the formula we use in approximating settling time for second-order transfer functions.
@@ -696,7 +841,7 @@
                           1
                             - (
                               calc.pow(calc.e, -znew * wnnew * x)
-                                * (z * calc.sin(wdnew * x) / (calc.sqrt(1 - z * z)) + calc.cos(wdnew * x))
+                                * (znew * calc.sin(wdnew * x) / (calc.sqrt(1 - znew * znew)) + calc.cos(wdnew * x))
                             )
                         )
                     ),
