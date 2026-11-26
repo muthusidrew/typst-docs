@@ -452,3 +452,6 @@
   (render-root(false), render-root(true))
 }
 
+#let fmt(c, d: 4) = {
+  str(calc.round(c, digits: d))
+}

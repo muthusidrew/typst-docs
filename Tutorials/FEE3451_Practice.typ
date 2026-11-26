@@ -648,8 +648,73 @@
     sq => [
       #sq(
         [Obtain solutions for the spatial distributions of the transverse field intensities for odd TE modes propagating in the $+z$-direction in the slab.],
-      )
+        answer: answer-box()[
+          For TE modes $E_(z) = 0$ so:
+          $
+            arrow(H)_(t) & = - frac(gamma, k_(c)^2) nabla_(t) H_(z) \
+            arrow(E)_(t) & = frac(j omega mu, k_(c)^2) hat(z) times nabla_(t) H_(z)
+          $
 
+          The transverse wavenumber is:
+          $
+            k_(c)^2 = cases(
+              k_(y)^2 = gamma^2 + k^2 & ", " |y| lt.eq h/2,
+              -alpha^2 = gamma^2 + k_(0)^2 & ", " |y| gt.eq h/2
+            )
+          $
+
+          Since the slab is of infinite extent in the $x$ direction:
+          $
+            frac(partial, partial x) = 0
+          $
+
+          So the Helmholtz Equation reduces to:
+          $
+            frac(partial^2 H_(z), partial y^2) + k_(c)^2 H_(z) = 0
+          $
+          In the suspended dielectric slab waveguide even and odd modes exist since the structure is symmetrical above and below $y = 0$ thus the electromagnetic fields must respect this.
+          The even mode is the fundamental mode and has no cutoff  frequency which can propagate if the slab is infinitesimally thin, the field has a max(or min) at the center.
+          The odd mode is the next higher mode, the field has to cross zero at the center thus there is a minimum thickness required for it to propagate hence has a non-zero cut-off frequency.
+
+          For odd TE modes, $H_(z)$ must be an odd function of $y$. Thus in the dielectric:
+          $
+            H_(z)(y) = A sin(k_(y)y), quad |y| lt.eq h/2
+          $
+
+          In air:
+          $
+            H_(z)(y) = cases(
+              B exp{-alpha(y - h/2)} ", " y gt.eq h/2,
+              -B exp{alpha(y + h/2)} ", " y lt.eq -h/2,
+            )
+          $
+          The $-B$ in the second case is there to enforce the odd symmetry of this mode.
+
+          Finding the gradient of $H_(z)$:
+          $
+            nabla_(t) H_(z) & = hat(y) frac(partial H_(z), partial y) \
+                            & = cases(
+                                -hat(y) B alpha exp{-alpha(y - h/2)} & ", " y gt.eq h/2,
+                                hat(y) A k_(y) cos (k_(y)y) & ", " |y| lt.eq h/2,
+                                -hat(y) B alpha exp{alpha(y + h/2)} & ", " y lt.eq -h/2,
+                              )
+          $
+
+          Thus:
+          $
+            arrow(E)_(t) & = cases(
+                             - hat(x) frac(j omega mu, alpha) B exp{-alpha(y - h/2)} & ", " y gt.eq h/2,
+                             - hat(x) frac(j omega mu, k_(y)) A cos (k_(y)y) & ", " |y| lt.eq h/2,
+                             - hat(x) frac(j omega mu, alpha) B exp{alpha(y + h/2)} & ", " y lt.eq -h/2,
+                           ) \
+            arrow(H)_(t) & = cases(
+                             - hat(y) frac(gamma, alpha) B exp{-alpha(y - h/2)} & ", " y gt.eq h/2,
+                             - hat(y) frac(gamma, k_(y)) A cos (k_(y)y) & ", " |y| lt.eq h/2,
+                             - hat(y) frac(gamma, alpha) B exp{alpha(y + h/2)} & ", " y lt.eq -h/2,
+                           )
+          $
+        ],
+      )
       #sq(
         [
           Show that when $k_y h lt.double 1$, where $k_y$ is the cut-off wavenumber in the transverse plane, the following relations hold approximately for these modes:
@@ -659,232 +724,342 @@
           $
           where $k = omega sqrt(mu epsilon)$ and $k_(0) = omega sqrt(mu_(0) epsilon_(0))$ and the symbols carry their usual meaning
         ],
+        answer: answer-box()[
+          The $k_(y)h lt.double 1$ is physically impossible for odd modes, to prove this we use the eigenvalue equation for odd modes and analyze the roots.
+          Since we already have the expression for $H_(z)$ and $arrow(E)_(t)$ for odd TE modes applying boundary condtions at $y = h/2$ yields:
+          $
+                  A sin(k_(y) h/2) & = B \
+            A k_(y) cos(k_(y) h/2) & = - B alpha
+          $
+
+          The eigenvalue equation is thus:
+          $
+            A k_(y) cos(k_(y) h/2) & = - A sin(k_(y) h/2) alpha \
+              k_(y) cot(k_(y) h/2) & = - alpha
+          $
+
+          $k_(y) > 0$ and $alpha > 0$ for a decaying evanescent field thus for the above condition to hold true:
+          $
+            cot(k_(y) h/2) < 0
+          $
+
+          The cotangent function is negative when its argument is between $pi/2$ and $pi$ for the lowest order mode.
+          $
+            pi/2 < frac(k_(y)h, 2) < pi \
+            pi < k_(y)h < 2 pi
+          $
+
+          This contradicts $k_(y) lt.double 1$
+
+          It is however feasible for even modes, deriving the expressions for $H_(z)$ and $arrow(E)_(t)$ for even modes and applying the boundary conditions yields the eigenvalue equation:
+          $
+            k_(y) tan(k_(y) h/2) = alpha
+          $
+
+          Because $alpha > 0$:
+          $
+            0 < frac(k_(y) h, 2) < pi/2 \
+            0 < k_(y) h < pi
+          $
+
+          It is possible to get $k_(y) h lt.double 1$ with these conditions.
+
+          Applying the small angle approximation $tan(x) approx x$:
+          $
+            alpha & approx k_(y) (frac(k_(y)h, 2)) \
+                  & approx h/2 k_(y)^2 \
+                  & approx h/2 (gamma^2 + k^2)
+          $
+
+          $gamma^2 = -k_0^2 - alpha^2$ however since the slab is thin the field decays slowly, $alpha^2$ is negligible thus $gamma^2 approx -k_0^2$ which gives:
+          $
+            alpha approx h/2(k^2 - k_(0)^2)
+          $
+          For a lossless medium $gamma = j beta$:
+          $
+            -beta^2 = -k_(0)^2 - alpha^2
+          $
+          once again since the field decays very slowly $alpha^2$ is negligible thus:
+          $
+            beta approx k_0
+          $
+
+          The negative sign in the question ($alpha tilde.op - h/2 (k^2 - k_0^2)$) is probably a typo
+        ],
       )
 
       #sq(
         [For a slab of thickness 5 mm and dielectric constant 3, estimate the distance from the slab surface where the field intensities will have decayed to $tilde.op 37%$ of their values at the surface of the slab at an operating frequency of 0.30 GHz.],
+        answer: answer-box()[
+          $
+            h = 5 times 10^(-3) "m" \
+            epsilon_(r) = 3\
+            f = 0.3 times 10^(9) "Hz"\
+            c_(0) = frac(1, sqrt(mu_(0) epsilon_(0))) = 3 times 10^(8) "m s"^(-1)
+          $
+          Thus:
+          $
+            k_(0) & = frac(2 pi f, c) \
+                  & = (2 pi times 0.3 times 10^(9))/(3 times 10^(8)) \
+                  & = 2 pi" rad m"^(-1) \
+                k & = k_0sqrt(epsilon_(r)) \
+                  & = 2 pi sqrt(3)" rad m"^(-1)
+          $
+          The decay constant is hence:
+          $
+            alpha & = h/2(k^2 - k_(0)^2) \
+                  & = 2.5 times 10^(-3) (12 - 4)pi^2 \
+                  & = #fmt(2.5e-3 * 8 * calc.pi * calc.pi)" Np m"^(-1)
+          $
+          The distance $d$ from the slab at which it decays to $37\% approx 1/e$ is:
+          $
+            exp(- alpha d) & = exp(-1) \
+                   alpha d & = 1 \
+                         d & = #fmt(1 / (2.5e-3 * 8 * calc.pi * calc.pi))" m"
+          $
+        ],
       )
     ],
   )
-  = DeepSeek
+]
+
+#numed-question()[
   #sub-question-group(
     lead: [
-      When the thickness of a dielectric slab waveguide situated in air, is very small compared to the operating wavelength, the field intensities decay very slowly with distance from the slab surface.
-      The propagation constant is then very nearly equal to that of the surrounding medium.
-      Consider the nonmagnetic dielectric slab of infinite extent in the $x z$-plane shown in @diel-susa
+      The parallel-plate waveguide shown in @parallel-plate is made from 50 $mu"m"$ thick copper plates separated by a lossless nonmagnetic simple dielectric. If the plate width $W$ much larger than the plate separation $b$.
       #align(center)[
         #figure(
           canvas({
             import draw: *
 
-            let x-min = -3.8
-            let x-max = 3.8
-            let half-h = 0.85
+            // Plate dimensions (oblique / isometric-like perspective)
+            let w = 6.2 // front width along x
+            let t = 0.22 // plate thickness along y
+            let gap = 1.35 // inner spacing b between plates
+            let dx = 3.2 // depth shift in x for back edge
+            let dy = 2.05 // depth shift in y for back edge
 
-            // Dielectric slab shaded region with jalt.doubleed left and right edges
+            let plate-fill = rgb("#e3e5ec")
+            let edge-fill = rgb("#d2d5df")
+            let stroke-main = 0.9pt + black
+
+            // Helper to draw a 3D-ish thin rectangular plate starting at bottom-front-left (ox, oy)
+            let draw-plate(ox, oy) = {
+              let f-bl = (ox, oy)
+              let f-br = (ox + w, oy)
+              let f-tr = (ox + w, oy + t)
+              let f-tl = (ox, oy + t)
+
+              let b-tl = (ox + dx, oy + t + dy)
+              let b-tr = (ox + w + dx, oy + t + dy)
+              let b-br = (ox + w + dx, oy + dy)
+
+              // Top face (parallelogram)
+              line(f-tl, f-tr, b-tr, b-tl, close: true, fill: plate-fill, stroke: stroke-main)
+
+              // Front face
+              line(f-bl, f-br, f-tr, f-tl, close: true, fill: edge-fill, stroke: stroke-main)
+
+              // Right side face
+              line(f-br, b-br, b-tr, f-tr, close: true, fill: edge-fill, stroke: stroke-main)
+            }
+
+            // Bottom plate (base at y = 0)
+            draw-plate(0, 0)
+
+            // Top plate (bottom face at y = t + gap)
+            let top-oy = t + gap
+            draw-plate(0, top-oy)
+
+            // Medium label inside the region between plates
+            content((w * 0.56, t + gap * 0.48), $mu, epsilon$)
+
+            // Width dimension W above front edge of top plate
+            let w-y = top-oy + t + 0.55
+            line((0, top-oy + t + 0.08), (0, w-y + 0.12), stroke: 0.75pt + black)
+            line((w, top-oy + t + 0.08), (w, w-y + 0.12), stroke: 0.75pt + black)
             line(
-              (x-min, half-h),
-              (x-max, half-h),
-              // Right jalt.doubleed edge (top to bottom)
-              (x-max + 0.08, half-h * 0.72),
-              (x-max - 0.07, half-h * 0.44),
-              (x-max + 0.08, half-h * 0.16),
-              (x-max - 0.06, -half-h * 0.14),
-              (x-max + 0.08, -half-h * 0.44),
-              (x-max - 0.07, -half-h * 0.72),
-              (x-max, -half-h),
-              // Bottom boundary
-              (x-min, -half-h),
-              // Left jalt.doubleed edge (bottom to top)
-              (x-min - 0.08, -half-h * 0.72),
-              (x-min + 0.07, -half-h * 0.44),
-              (x-min - 0.08, -half-h * 0.16),
-              (x-min + 0.06, half-h * 0.14),
-              (x-min - 0.08, half-h * 0.44),
-              (x-min + 0.07, half-h * 0.72),
-              close: true,
-              fill: rgb("#dcdde3"),
+              (0, w-y),
+              (w, w-y),
+              stroke: 0.85pt + black,
+              mark: (start: "stealth", end: "stealth", fill: black, scale: 0.8),
+            )
+            content((w / 2, w-y + 0.28), $W$)
+
+            // Spacing dimension b on the left between bottom of top plate and top of bottom plate
+            let b-x = -0.65
+            let y-bot-top = t
+            let y-top-bot = top-oy
+            line((-0.12, y-bot-top), (b-x - 0.15, y-bot-top), stroke: 0.75pt + black)
+            line((-0.12, y-top-bot), (b-x - 0.15, y-top-bot), stroke: 0.75pt + black)
+            line(
+              (b-x, y-bot-top),
+              (b-x, y-top-bot),
+              stroke: 0.85pt + black,
+              mark: (start: "stealth", end: "stealth", fill: black, scale: 0.8),
+            )
+            content((b-x - 0.35, (y-bot-top + y-top-bot) / 2), $b$)
+
+            // Coordinate axes at front-right corner of bottom plate (w, t)
+            let ax-o = (w - 0.25, t)
+
+            // y-axis (up)
+            line(
+              ax-o,
+              (ax-o.at(0), ax-o.at(1) + 1.05),
               stroke: 0.9pt + black,
+              mark: (end: "stealth", fill: black, scale: 0.75),
             )
+            content((ax-o.at(0), ax-o.at(1) + 1.25), $y$)
 
-            // z-axis (horizontal through origin)
+            // x-axis (left along width)
             line(
-              (x-min - 0.45, 0),
-              (x-max + 1.4, 0),
+              ax-o,
+              (ax-o.at(0) - 1.15, ax-o.at(1)),
               stroke: 0.9pt + black,
-              mark: (end: "stealth", fill: black),
+              mark: (end: "stealth", fill: black, scale: 0.75),
             )
-            content((x-max + 1.65, 0), $z$)
+            content((ax-o.at(0) - 1.28, ax-o.at(1) + 0.18), $x$)
 
-            // y-axis (vertical through origin)
+            // z-axis (into/back along depth)
             line(
-              (0, -half-h - 1.15),
-              (0, half-h + 1.55),
+              ax-o,
+              (ax-o.at(0) + 0.85, ax-o.at(1) + 0.55),
               stroke: 0.9pt + black,
-              mark: (end: "stealth", fill: black),
+              mark: (end: "stealth", fill: black, scale: 0.75),
             )
-            content((0, half-h + 1.8), $y$)
-
-            // x-axis symbol at origin (into the page: circle with cross)
-            let r = 0.12
-            circle((0, 0), radius: r, fill: rgb("#dcdde3"), stroke: 0.9pt + black)
-            line(
-              (-r * 0.707, -r * 0.707),
-              (r * 0.707, r * 0.707),
-              stroke: 0.8pt + black,
-            )
-            line(
-              (-r * 0.707, r * 0.707),
-              (r * 0.707, -r * 0.707),
-              stroke: 0.8pt + black,
-            )
-            content((0.28, -0.26), $x$)
-
-            // Medium parameter labels
-            content((-1.35, half-h + 0.42), $epsilon_0, mu_0$)
-            content((-1.35, half-h * 0.42), $epsilon, mu$)
-            content((-1.35, -half-h - 0.42), $epsilon_0, mu_0$)
-
-            // Right side h/2 dimension markers
-            let dim-x = x-max + 0.45
-            line((x-max + 0.18, half-h), (dim-x + 0.25, half-h), stroke: 0.75pt + black)
-            line((x-max + 0.18, -half-h), (dim-x + 0.25, -half-h), stroke: 0.75pt + black)
-
-            // Upper h/2 arrow
-            line(
-              (dim-x, 0),
-              (dim-x, half-h),
-              stroke: 0.8pt + black,
-              mark: (start: "stealth", end: "stealth", fill: black, scale: 0.75),
-            )
-            content((dim-x + 0.45, half-h / 2), $h\/2$)
-
-            // Lower h/2 arrow
-            line(
-              (dim-x, -half-h),
-              (dim-x, 0),
-              stroke: 0.8pt + black,
-              mark: (start: "stealth", end: "stealth", fill: black, scale: 0.75),
-            )
-            content((dim-x + 0.45, -half-h / 2), $h\/2$)
+            content((ax-o.at(0) + 0.98, ax-o.at(1) + 0.42), $z$)
           }),
           caption: "",
-        )<diel-susa>
+        )<parallel-plate>
       ]
     ],
     sq => [
       #sq(
-        [Obtain solutions for the spatial distributions of the transverse field intensities for odd TE modes propagating in the $+z$-direction in the slab.],
+        [State the conditions the plates must have in order that electric wall boundary conditions may be assumed for the plate surfaces hence, derive expressions for the field distributions in the transverse plane in the guide.],
         answer: answer-box()[
-          For a TE mode, $E_z = 0$. The axial magnetic field $H_z$ satisfies the Helmholtz equation:
-          $
-            nabla_t^2 H_z + k_c^2 H_z = 0
-          $
-          Based on the figure, the slab extends along the $y$-axis from $y = -h/2$ to $y = h/2$. Since the slab is infinite in the $x$-direction, $frac(partial, partial x) = 0$, so $nabla_t^2 = frac(partial^2, partial y^2)$.
+          + For TEM waves to propagate the plates must be perfectly electric conductors so that the tangential electric field can be zero at the surfaces.
+          + The plate separation $b$ must be much less than the wavelength to ensure only the dominant mode propagates.
 
-          The transverse wavenumber is:
+          For TEM mode $E_(z) = H_(z) = 0$ so the standard transverse field equations an indeterminate form.
+          Since $E_(z) = 0$ $nabla_(t) times arrow(E)_(t) = 0$ meaning $E_(t)$ is irrotational and can be expressed as the gradient of a scalar potential:
           $
-            k_c^2 = cases(
-              k_y^2 = gamma^2 + k^2 = k^2 - beta^2 & ", " |y| lt.eq h/2 " (dielectric)",
-              -alpha^2 = gamma^2 + k_0^2 = k_0^2 - beta^2 & ", " |y| gt.eq h/2 " (air)"
-            )
+            arrow(E)_(t) = - nabla_(t) Phi (x, y)
           $
-          For odd TE modes, $H_z$ must be an odd function of $y$. Thus, in the core:
+
+          In the source-free dielectric, Gauss' law requires $nabla_(t) dot arrow(E)_(t) = 0$ so $Phi$ satisfies Laplace's equation:
           $
-            H_z(y) = A sin(k_y y), quad |y| lt.eq h/2
+            nabla_(t)^2 Phi = 0
           $
-          In the air cladding, the field must decay exponentially and be odd:
+
+          Since $W gt.double b$ there is no variation in the $x$ direction hence $frac(partial, partial x) = 0$ simplifying Laplace's Equation to:
           $
-            H_z(y) = cases(
-              B exp{-alpha (y - h/2)} & ", " y gt.eq h/2,
-              -B exp{alpha (y + h/2)} & ", " y lt.eq -h/2
-            )
+            frac(dif^2 Phi, dif y^2) & = 0 \
+                              Phi(y) & = A y + C
           $
-          The transverse electric field is $arrow(E)_t = frac(j omega mu, k_c^2) hat(z) times nabla_t H_z$. With $nabla_t = hat(y) frac(partial, partial y)$:
+
+          The transverse electric field is uniform in $y$:
           $
-            arrow(E)_t = frac(j omega mu, k_c^2) (hat(z) times hat(y)) frac(partial H_z, partial y) = -hat(x) frac(j omega mu, k_c^2) frac(partial H_z, partial y)
+            arrow(E)_(t) & = - nabla_(t) Phi (x, y) \
+                         & = - hat(y) frac(dif Phi, dif y) \
+                         & = - hat(y) A \
+                         & = hat(y) E_(y)
           $
-          Thus, $E_x$ in the core ($|y| lt.eq h/2$):
+
+          The boundary condition at $y = 0, y = b$ require the tangential electric field to vanish.
+          The tangential components are $E_(x), E_(z)$ which are already zero.
+
+          The transverse magnetic field is found from Faraday's law:
           $
-            E_x = -frac(j omega mu, k_y^2) (A k_y cos(k_y y)) = -frac(j omega mu, k_y) A cos(k_y y)
+            arrow(H)_(t) & = frac(gamma, j omega mu) hat(z) times arrow(E)_(t) \
+                         & = 1/ Z_("TEM") hat(z) times arrow(E)_(t) \
+                         & = -hat(x) frac(E_(y), Z_("TEM"))
           $
-          In the upper air cladding ($y gt.eq h/2$):
+          where $Z_("TEM") = sqrt(frac(mu, epsilon))$ is the intrinsic impedance of the dielectric medium.
+
+          Is what I would have given as the answer but since #subq-ref(<tm-att>) requires a $"TM"_n$ mode it makes sense to start with TM modes here.
+
+          Thus $H_(z) = 0$ meaning:
           $
-            E_x = -frac(j omega mu, -alpha^2) (-alpha B exp{-alpha (y - h/2)}) = -frac(j omega mu, alpha) B exp{-alpha (y - h/2)}
+            arrow(H)_(t) & = - frac(j omega epsilon, k_(c)^2) hat(z) times nabla_(t) E_(z) \
+            arrow(E)_(t) & = - frac(gamma, k_(c)^2) nabla_(t) E_(z)
+          $
+
+          Since $W lt.double b$ $frac(partial, partial x) = 0$ thus Helmholtz equation becomes:
+          $
+            frac(partial^2 E_(z), partial y^2) + k_(c)^2 E_(z) = 0
+          $
+
+          This yields the solution(the usual steps general form of the solution Dirichlet boundary conditions etc.):
+          $
+            E_(z) = A sin(frac(n pi, b) y)
+          $
+
+          The transverse gradient of $E_(z)$ is:
+          $
+            nabla_(t)E_(z) & = hat(y) frac(partial E_(z), partial y) \
+                           & = hat(y) frac(n pi, b) A cos (frac(n pi, b)y) \
+                           & = hat(y) k_(c) A cos(k_(c)y)
+          $
+
+          The expression for the transverse fields become:
+          $
+            arrow(E)_(t) & = - hat(y) frac(gamma, k_(c)) A cos(k_(c)y) \
+            arrow(H)_(t) & = hat(x) frac(j omega epsilon, k_(c)) A cos(k_(c) y)
           $
         ],
       )
 
       #sq(
-        [
-          Show that when $k_y h lt.double 1$, where $k_y$ is the cut-off wavenumber in the transverse plane, the following relations hold approximately for these modes:
-          $
-            beta tilde.op k_0 \
-            alpha tilde.op -frac(h, 2)(k^2 - k_0^2)
-          $
-          where $k = omega sqrt(mu epsilon)$ and $k_(0) = omega sqrt(mu_(0) epsilon_(0))$ and the symbols carry their usual meaning
-        ],
+        [Derive expressions for the charge and current distributions in the plates under these conditions.],
         answer: answer-box()[
-          #text(
-            style: "italic",
-          )[Note on the exam paper's typo: The condition $k_y h lt.double 1$ cannot apply to odd modes. Odd modes have a cutoff at $k_y h = pi$. The small-angle approximation actually applies to the fundamental even mode (where $H_z$ is a cosine). Furthermore, the negative sign in the exam paper's $alpha$ expression is a typo; $alpha$ must be positive for the field to decay. Below, I show the derivation for the expected approximations.]
+          The normal is into the dielectric so in the case of the bottom plate its from the metal into the dielectric meaning $hat(n) = hat(y)$.
+          For the top plate $hat(n) = -hat(y)$.
+          This results from the fact that the normal vector is always defined as pointing from Medium 1 into Medium 2 and the general form of the boundary condtion is:
+          $
+            hat(n) dot (arrow(D)_2 - arrow(D)_1) = rho_(s) \
+            hat(n) times (arrow(H)_2 - arrow(H)_1) = arrow(J)_(s)
+          $
+          Inside a perfect conductor fields are zero so for convenience we medium 1 to be the perfect conductor for the expressions to reduce to:
+          $
+            hat(n) dot arrow(D)_(2) = rho_(s) \
+            hat(n) times arrow(H)_(2) = arrow(J)_(s)
+          $
 
-          For the lowest-order even TE mode, the fields in the core ($|y| lt.eq h/2$) are:
+          Thus for the bottom plate $y = 0$:
           $
-            H_z = A cos(k_y y), quad E_x = frac(j omega mu, k_y) A sin(k_y y)
+            arrow(J)_(s) & = hat(n) times arrow(H) \
+                         & = hat(y) times hat(x) H_(x)(0) \
+                         & = - hat(z) H_(x)(0) \
+                         & = - hat(z) frac(j omega epsilon, k_(c)) A \
+                 rho_(s) & = hat(n) dot arrow(D) \
+                         & = hat(y) dot (epsilon arrow(E)) \
+                         & = hat(y) dot {epsilon (hat(y)E_(y)(0) + hat(z)E_(z)(0))} \
+                         & = epsilon E_(y)(0) \
+                         & = - frac(epsilon gamma, k_(c)) A
           $
-          In the air ($y gt.eq h/2$):
+
+          and for the top plate $y = b$:
           $
-            H_z = B exp{-alpha (y - h/2)}, quad E_x = -frac(j omega mu, alpha) B exp{-alpha (y - h/2)}
-          $
-          Matching boundary conditions at $y = h/2$ gives the eigenvalue equation:
-          $
-            k_y tan(k_y h/2) = alpha
-          $
-          For $k_y h lt.double 1$, we use the small-angle approximation $tan(x) tilde.op x$:
-          $
-            alpha tilde.op k_y (frac(k_y h, 2)) = frac(h, 2) k_y^2
-          $
-          From the dispersion relation $k_y^2 = k^2 - k_0^2 - alpha^2$, since the slab is thin, the field decays slowly ($alpha$ is very small), so $alpha^2$ is negligible compared to $k^2 - k_0^2$. Thus:
-          $
-            k_y^2 tilde.op k^2 - k_0^2
-          $
-          Substituting this back yields:
-          $
-            alpha tilde.op frac(h, 2) (k^2 - k_0^2)
-          $
-          Since $alpha$ is very small, the propagation constant is:
-          $
-            beta = sqrt(k_0^2 + alpha^2) tilde.op k_0
+            arrow(J)_(s) & = hat(n) times arrow(H) \
+                         & = - hat(y) times hat(x) H_(x)(b) \
+                         & = hat(z) H_(x)(b) \
+                         & = hat(z) frac(j omega epsilon, k_(c)) A cos(n pi) \
+                         & = (-1)^(n) hat(z) frac(j omega epsilon, k_(c)) A \
+                 rho_(s) & = hat(n) dot arrow(D) \
+                         & = - hat(y) dot (epsilon arrow(E)) \
+                         & = - hat(y) dot {epsilon (hat(y)E_(y)(b) + hat(z)E_(z)(b))} \
+                         & = - epsilon E_(y)(b) \
+                         & = (-1)^(n)frac(epsilon gamma, k_(c)) A
           $
         ],
       )
 
       #sq(
-        [For a slab of thickness 5 mm and dielectric constant 3, estimate the distance from the slab surface where the field intensities will have decayed to $tilde.op 37%$ of their values at the surface of the slab at an operating frequency of 0.30 GHz.],
+        [Obtain an expression for the attenuation constant for propagating $"TM"_n$ modes in the guide as a function of the ratio $f/f_"cn"$, where $f$ is the operating frequency and $f_"cn"$ the cut-off frequency, hence determine the value of $f/f_"cn"$ for which the attenuation constant is minimum.],
+        ref: <tm-att>,
         answer: answer-box()[
-          Given:
-          $h = 5 " mm" = 5 times 10^(-3) " m"$, $epsilon_r = 3$, $f = 0.30 " GHz" = 0.3 times 10^9 " Hz"$, $c = 3 times 10^8 " m/s"$.
 
-          Calculate the free-space and dielectric wavenumbers:
-          $
-            k_0 = frac(2 pi f, c) = frac(2 pi (0.3 times 10^9), 3 times 10^8) = 2 pi " rad/m"
-          $
-          $
-            k = k_0 sqrt(epsilon_r) = 2 pi sqrt(3) " rad/m"
-          $
-          Calculate the decay constant $alpha$:
-          $
-            alpha & = frac(h, 2)(k^2 - k_0^2) \
-                  & = frac(5 times 10^(-3), 2) ((2 pi sqrt(3))^2 - (2 pi)^2) \
-                  & = 0.0025 (12 pi^2 - 4 pi^2) \
-                  & = 0.0025 (8 pi^2) = 0.02 pi^2 " Np/m" tilde.op 0.1974 " Np/m"
-          $
-          The field intensity decays as $exp(-alpha d)$. We want the distance $d$ where it decays to $37%$, which is $1/e$:
-          $
-            exp(-alpha d) = exp(-1) arrow.double d = frac(1, alpha) = frac(1, 0.1974) tilde.op 5.07 " m"
-          $
-          The field intensities will have decayed to $tilde.op 37%$ of their surface values at a distance of approximately $5.07 " m"$ from the slab surface.
         ],
       )
     ],
@@ -894,378 +1069,426 @@
 #numed-question()[
   #sub-question(
     [
-      The parallel-plate waveguide shown in Fig. Q2(b) is made from 50 $mu$m thick copper plates separated by a lossless nonmagnetic simple dielectric. If the plate width W much larger than the plate separation b, (16 marks)
-
-      #align(center)[
-        #canvas({
-          import draw: *
-
-          // Plate dimensions (oblique / isometric-like perspective)
-          let w = 6.2 // front width along x
-          let t = 0.22 // plate thickness along y
-          let gap = 1.35 // inner spacing b between plates
-          let dx = 3.2 // depth shift in x for back edge
-          let dy = 2.05 // depth shift in y for back edge
-
-          let plate-fill = rgb("#e3e5ec")
-          let edge-fill = rgb("#d2d5df")
-          let stroke-main = 0.9pt + black
-
-          // Helper to draw a 3D-ish thin rectangular plate starting at bottom-front-left (ox, oy)
-          let draw-plate(ox, oy) = {
-            let f-bl = (ox, oy)
-            let f-br = (ox + w, oy)
-            let f-tr = (ox + w, oy + t)
-            let f-tl = (ox, oy + t)
-
-            let b-tl = (ox + dx, oy + t + dy)
-            let b-tr = (ox + w + dx, oy + t + dy)
-            let b-br = (ox + w + dx, oy + dy)
-
-            // Top face (parallelogram)
-            line(f-tl, f-tr, b-tr, b-tl, close: true, fill: plate-fill, stroke: stroke-main)
-
-            // Front face
-            line(f-bl, f-br, f-tr, f-tl, close: true, fill: edge-fill, stroke: stroke-main)
-
-            // Right side face
-            line(f-br, b-br, b-tr, f-tr, close: true, fill: edge-fill, stroke: stroke-main)
-          }
-
-          // Bottom plate (base at y = 0)
-          draw-plate(0, 0)
-
-          // Top plate (bottom face at y = t + gap)
-          let top-oy = t + gap
-          draw-plate(0, top-oy)
-
-          // Medium label inside the region between plates
-          content((w * 0.56, t + gap * 0.48), $mu, epsilon$)
-
-          // Width dimension W above front edge of top plate
-          let w-y = top-oy + t + 0.55
-          line((0, top-oy + t + 0.08), (0, w-y + 0.12), stroke: 0.75pt + black)
-          line((w, top-oy + t + 0.08), (w, w-y + 0.12), stroke: 0.75pt + black)
-          line(
-            (0, w-y),
-            (w, w-y),
-            stroke: 0.85pt + black,
-            mark: (start: "stealth", end: "stealth", fill: black, scale: 0.8),
-          )
-          content((w / 2, w-y + 0.28), $W$)
-
-          // Spacing dimension b on the left between bottom of top plate and top of bottom plate
-          let b-x = -0.65
-          let y-bot-top = t
-          let y-top-bot = top-oy
-          line((-0.12, y-bot-top), (b-x - 0.15, y-bot-top), stroke: 0.75pt + black)
-          line((-0.12, y-top-bot), (b-x - 0.15, y-top-bot), stroke: 0.75pt + black)
-          line(
-            (b-x, y-bot-top),
-            (b-x, y-top-bot),
-            stroke: 0.85pt + black,
-            mark: (start: "stealth", end: "stealth", fill: black, scale: 0.8),
-          )
-          content((b-x - 0.35, (y-bot-top + y-top-bot) / 2), $b$)
-
-          // Coordinate axes at front-right corner of bottom plate (w, t)
-          let ax-o = (w - 0.25, t)
-
-          // y-axis (up)
-          line(
-            ax-o,
-            (ax-o.at(0), ax-o.at(1) + 1.05),
-            stroke: 0.9pt + black,
-            mark: (end: "stealth", fill: black, scale: 0.75),
-          )
-          content((ax-o.at(0), ax-o.at(1) + 1.25), $y$)
-
-          // x-axis (left along width)
-          line(
-            ax-o,
-            (ax-o.at(0) - 1.15, ax-o.at(1)),
-            stroke: 0.9pt + black,
-            mark: (end: "stealth", fill: black, scale: 0.75),
-          )
-          content((ax-o.at(0) - 1.28, ax-o.at(1) + 0.18), $x$)
-
-          // z-axis (into/back along depth)
-          line(
-            ax-o,
-            (ax-o.at(0) + 0.85, ax-o.at(1) + 0.55),
-            stroke: 0.9pt + black,
-            mark: (end: "stealth", fill: black, scale: 0.75),
-          )
-          content((ax-o.at(0) + 0.98, ax-o.at(1) + 0.42), $z$)
-        })
-      ]
-      (i) State the conditions the plates must have in order that electric wall boundary conditions may be assumed for the plate surfaces hence, derive expressions for the field distributions in the transverse plane in the guide. \
-      (ii) Derive expressions for the charge and current distributions in the plates under these conditions. \
-      (iii) Obtain an expression for the attenuation constant for propagating $"TM"_n$ modes in the guide as a function of the ratio $f/f_{"cn"}$, where $f$ is the operating frequency and $f_{"cn"}$ the cut-off frequency, hence determine the value of $f/f_{"cn"}$ for which the attenuation constant is minimum.
-    ],
-    answer: answer-box()[
-      #text(weight: "bold")[Part (i): Conditions and Field Distributions]
-
-      *Conditions for electric wall boundary conditions:*
-      1. The plates must be perfect electric conductors (PEC), meaning their conductivity is infinite (or very high, like copper). This forces the tangential electric field to be zero at the surfaces.
-      2. The plate width $W$ must be much larger than the separation $b$ ($W lt.double$). This ensures that fringing fields at the edges can be neglected, reducing the problem to a 1D variation in the $y$-direction.
-
-      Let the plates be at $y = 0$ and $y = b$, with the wave propagating in the $+z$ direction. For a TM mode, $H_z = 0$ and $E_z$ satisfies the Helmholtz equation:
-      $
-        nabla_t^2 E_z + k_c^2 E_z = 0
-      $
-      Since $W lt.double b$, there is no variation in the $x$-direction, so $nabla_t^2 = frac(partial^2, partial y^2)$. The general solution is:
-      $
-        E_z(y) = A cos(k_c y) + B sin(k_c y)
-      $
-      The boundary conditions at the perfect conductors are that the tangential electric field must be zero. The tangential components are $E_x$ and $E_z$.
-      *   At $y=0$: $E_z(0) = 0 arrow.double A = 0$.
-      *   At $y=b$: $E_z(b) = B sin(k_c b) = 0 arrow.double k_c b = n pi$, where $n = 1, 2, 3, dots$
-
-      Thus, $k_c = frac(n pi, b)$ and:
-      $
-        E_z(y) = B sin(frac(n pi y, b))
-      $
-      The transverse fields are found from Maxwell's equations:
-      $
-        arrow(E)_t &= -frac(gamma, k_c^2) nabla_t E_z = -hat(y) frac(gamma, k_c^2) B k_c cos(k_c y) = -hat(y) frac(gamma, k_c) B cos(k_c y) \
-        arrow(H)_t &= frac(j omega epsilon, k_c^2) hat(z) times nabla_t E_z = hat(x) frac(j omega epsilon, k_c^2) B k_c cos(k_c y) = hat(x) frac(j omega epsilon, k_c) B cos(k_c y)
-      $
-
-      #text(weight: "bold")[Part (ii): Charge and Current Distributions]
-
-      Surface current $arrow(J)_s$ and surface charge $rho_s$ on the perfect conductors are given by boundary conditions:
-      $
-        arrow(J)_s & = hat(n) times arrow(H)_("tan") \
-             rho_s & = hat(n) dot arrow(D)_("normal") = hat(n) dot (epsilon arrow(E))
-      $
-      *On the bottom plate ($y=0$):*
-      The normal into the dielectric is $hat(n) = hat(y)$. The fields are $arrow(H) = hat(x) H_x(0)$ and $arrow(E) = hat(y) E_y(0)$.
-      $
-        arrow(J)_s & = hat(y) times hat(x) H_x(0) = -hat(z) frac(j omega epsilon, k_c) B \
-             rho_s & = hat(y) dot (hat(y) epsilon E_y(0)) = epsilon (-frac(gamma, k_c) B) = -frac(epsilon gamma, k_c) B
-      $
-      *On the top plate ($y=b$):*
-      The normal into the dielectric is $hat(n) = -hat(y)$. The fields are $H_x(b) = frac(j omega epsilon, k_c) B cos(n pi) = frac(j omega epsilon, k_c) B (-1)^n$ and $E_y(b) = -frac(gamma, k_c) B (-1)^n$.
-      $
-        arrow(J)_s &= -hat(y) times hat(x) H_x(b) = hat(z) frac(j omega epsilon, k_c) B (-1)^n \
-        rho_s &= -hat(y) dot (hat(y) epsilon E_y(b)) = -epsilon (-frac(gamma, k_c) B (-1)^n) = frac(epsilon gamma, k_c) B (-1)^n
-      $
-
-      #text(weight: "bold")[Part (iii): Attenuation Constant for $"TM"_n$ Modes]
-
-      The attenuation constant $alpha_c$ due to conductor loss is given by $alpha_c = frac(P_L, 2P)$, where $P_L$ is the power lost per unit length in the plates, and $P$ is the total power flowing down the guide.
-
-      Using the fields from Part (i), the time-averaged power flow is:
-      $
-        P = frac(1, 2) "Re" integral_0^b integral_0^W (-E_y H_x^*) dif x dif y = frac(W beta omega epsilon, 2 k_c^2) B^2 integral_0^b cos^2(k_c y) dif y = frac(W beta omega epsilon b, 4 k_c^2) B^2
-      $
-      The power lost per unit length in both plates (each with surface resistance $R_s = sqrt(omega mu_0 / (2 sigma))$) is:
-      $
-        P_L = R_s integral_0^W |J_s(y=0)|^2 dif x + R_s integral_0^W |J_s(y=b)|^2 dif x
-      $
-      Since $|J_s|^2 = (frac(omega epsilon, k_c) B)^2$ on both plates:
-      $
-        P_L = 2 R_s W (frac(omega epsilon, k_c) B)^2
-      $
-      Substituting into $alpha_c = frac(P_L, 2P)$:
-      $
-        alpha_c &= frac(2 R_s W frac(omega^2 epsilon^2, k_c^2) B^2, 2 frac(W beta omega epsilon b, 4 k_c^2) B^2) = frac(2 R_s omega^2 epsilon^2, 2 beta omega epsilon b / 4) = frac(4 R_s omega epsilon, beta b)
-      $
-      Multiply numerator and denominator by $eta = sqrt(mu/epsilon)$:
-      $
-        alpha_c = frac(4 R_s, b eta) frac(omega sqrt(mu epsilon), beta) = frac(4 R_s, b eta) frac(k, beta) = frac(4 R_s, b eta) frac(1, sqrt(1 - (f_c/f)^2))}
-      $
-      *(Note: A factor of 2 can appear depending on whether the top plate is counted differently, but the functional dependence is what matters).*
-
-      As a function of $f/f_{"cn"}$, let $x = f/f_{"cn"}$:
-      $
-        alpha_c(x) = frac(4 R_s, b eta) frac(1, sqrt(1 - 1/x^2)) = frac(4 R_s, b eta) frac(x, sqrt(x^2 - 1))
-      $
-      To find the minimum, we take the derivative with respect to $x$ and set it to zero. The function $frac(x, sqrt(x^2-1))$ is monotonically decreasing for $x > 1$. Therefore, the attenuation constant does not have a finite minimum; it approaches zero as $x arrow.r.double infinity$ (i.e., $f arrow.r.double infinity$).
-
-      (Exam Note: If the question intended to ask for TE modes, the attenuation function is $alpha_c prop frac(1, x^2 sqrt(1 - 1/x^2))$. Differentiating this yields a minimum exactly at $f/f_{"cn"} = sqrt(3) tilde.op 1.732$. Since the question explicitly states TM modes, the theoretical minimum is at $f/f_{"cn"} arrow.r.double infinity$)
-    ],
-  )
-]
-
-#numed-question()[
-  #sub-question(
-    [
-      (b) An electromagnetic wave is propagating through an air-filled rectangular waveguide with perfectly conducting walls and the cross-section shown in Fig. Q3(b). Given that the axial electric and magnetic field intensity distributions in the guide may be expressed as
+      An electromagnetic wave is propagating through an air-filled rectangular waveguide with perfectly conducting walls and the cross-section shown in @rect-guide. Given that the axial electric and magnetic field intensity distributions in the guide may be expressed as
       $
         E_z & = E_(m n) sin(frac(m pi, a) x) sin(frac(n pi, b) y), quad m = 1, 2, 3, dots.c, quad n = 1, 2, 3, dots.c \
         H_z & = H_(m n) cos(frac(m pi, a) x) cos(frac(n pi, b) y), quad m = 0, 1, 2, dots.c, quad n = 0, 1, 2, dots.c
       $
-      respectively, obtain solutions for the transverse field distributions for a general transverse-electric mode in the guide. (9 marks)
+      respectively, obtain solutions for the transverse field distributions for a general transverse-electric mode in the guide.
+
+      #align(center)[
+        #figure(
+          canvas({
+            import draw: *
+
+            // Coordinate axes (left side)
+            let ax-o = (-4.2, -0.55)
+            let ax-arrow = (mark: (end: "stealth", fill: black, scale: 0.8), stroke: 0.9pt + black)
+
+            // y-axis (up)
+            line(ax-o, (ax-o.at(0), ax-o.at(1) + 1.45), ..ax-arrow)
+            content((ax-o.at(0), ax-o.at(1) + 1.68), $y$)
+
+            // x-axis (right)
+            line(ax-o, (ax-o.at(0) + 1.55, ax-o.at(1)), ..ax-arrow)
+            content((ax-o.at(0) + 1.78, ax-o.at(1)), $x$)
+
+            // z-axis (down-left)
+            line(ax-o, (ax-o.at(0) - 1.05, ax-o.at(1) - 0.75), ..ax-arrow)
+            content((ax-o.at(0) - 1.25, ax-o.at(1) - 0.92), $z$)
+
+            // Rectangular waveguide cross-section (right side)
+            let wx0 = -1.6
+            let wy0 = -0.8
+            let a = 4.6 // inner width
+            let b = 2.6 // inner height
+            let wall = 0.2 // wall thickness
+
+            // Outer shaded wall
+            rect(
+              (wx0 - wall, wy0 - wall),
+              (wx0 + a + wall, wy0 + b + wall),
+              fill: rgb("#dcdde3"),
+              stroke: 0.9pt + black,
+            )
+
+            // Inner hollow guide opening
+            rect(
+              (wx0, wy0),
+              (wx0 + a, wy0 + b),
+              fill: white,
+              stroke: 0.9pt + black,
+            )
+
+            // Width dimension 'a' below waveguide
+            let dim-a-y = wy0 - wall - 0.75
+            line((wx0 - wall, wy0 - wall - 0.08), (wx0 - wall, dim-a-y - 0.15), stroke: 0.75pt + black)
+            line((wx0 + a + wall, wy0 - wall - 0.08), (wx0 + a + wall, dim-a-y - 0.15), stroke: 0.75pt + black)
+            line(
+              (wx0 - wall, dim-a-y),
+              (wx0 + a + wall, dim-a-y),
+              stroke: 0.85pt + black,
+              mark: (start: "stealth", end: "stealth", fill: black, scale: 0.8),
+            )
+            content((wx0 + a / 2, dim-a-y + 0.25), $a$)
+
+            // Height dimension 'b' to the right of waveguide
+            let dim-b-x = wx0 + a + wall + 1.05
+            line((wx0 + a + wall + 0.08, wy0 + b + wall), (dim-b-x + 0.22, wy0 + b + wall), stroke: 0.75pt + black)
+            line((wx0 + a + wall + 0.08, wy0 - wall), (dim-b-x + 0.22, wy0 - wall), stroke: 0.75pt + black)
+            line(
+              (dim-b-x, wy0 - wall),
+              (dim-b-x, wy0 + b + wall),
+              stroke: 0.85pt + black,
+              mark: (start: "stealth", end: "stealth", fill: black, scale: 0.8),
+            )
+            content((dim-b-x + 0.35, wy0 + b / 2), $b$)
+          }),
+          caption: "",
+        )<rect-guide>
+      ]
     ],
     answer: answer-box()[
-      For a general Transverse Electric ("TE") mode, the axial electric field is zero by definition, so $E_z = 0$.
-      The given axial magnetic field is:
+      In TE mode, $E_(z) = 0$ hence:
       $
-        H_z = H_(m n) cos(frac(m pi, a) x) cos(frac(n pi, b) y)
-      $
-      The transverse field components are related to the axial components by:
-      $
-        arrow(E)_t & = frac(j omega mu, k_c^2) hat(z) times nabla_t H_z \
-        arrow(H)_t & = -frac(gamma, k_c^2) nabla_t H_z
-      $
-      where $gamma$ is the propagation constant and $k_c^2 = (frac(m pi, a))^2 + (frac(n pi, b))^2$.
-
-      First, calculate the transverse gradient of $H_z$:
-      $
-        nabla_t H_z &= hat(x) frac(partial H_z, partial x) + hat(y) frac(partial H_z, partial y) \
-        &= hat(x) (-H_(m n) frac(m pi, a) sin(frac(m pi, a) x) cos(frac(n pi, b) y)) + hat(y) (-H_(m n) frac(n pi, b) cos(frac(m pi, a) x) sin(frac(n pi, b) y))
+        arrow(H)_(t) & = - frac(gamma, k_(c)^2) nabla_(t) H_(z) \
+        arrow(E)_(t) & = frac(j omega mu, k_(c)^2) hat(z) times nabla_(t) H_(z)
       $
 
-      Now, substitute into the $arrow(E)_t$ equation:
+      Finding the gradient of $H_(z)$:
       $
-        arrow(E)_t &= frac(j omega mu, k_c^2) hat(z) times (hat(x) frac(partial H_z, partial x) + hat(y) frac(partial H_z, partial y)) \
-        &= frac(j omega mu, k_c^2) (hat(y) frac(partial H_z, partial x) - hat(x) frac(partial H_z, partial y))
-      $
-      Thus, the transverse electric field components are:
-      $
-        E_x &= -frac(j omega mu, k_c^2) frac(partial H_z, partial y) = frac(j omega mu n pi, k_c^2 b) H_(m n) cos(frac(m pi, a) x) sin(frac(n pi, b) y) \
-        E_y &= frac(j omega mu, k_c^2) frac(partial H_z, partial x) = -frac(j omega mu m pi, k_c^2 a) H_(m n) sin(frac(m pi, a) x) cos(frac(n pi, b) y)
+        nabla_(t) H_(z) & = hat(x) frac(partial H_(z), partial x) + hat(y) frac(partial H_(z), partial y) \
+        & = - hat(x)H_("mn") frac(m pi, a)sin(frac(m pi, a) x) cos(frac(n pi, b)y) - hat(y)H_("mn") frac(n pi, b)cos(frac(m pi, a) x) sin(frac(n pi, b)y)
       $
 
-      Similarly, for the transverse magnetic field:
+      Thus:
       $
-        arrow(H)_t = -frac(gamma, k_c^2) nabla_t H_z = -frac(gamma, k_c^2) (hat(x) frac(partial H_z, partial x) + hat(y) frac(partial H_z, partial y))
-      $
-      Thus, the transverse magnetic field components are:
-      $
-        H_x &= -frac(gamma, k_c^2) frac(partial H_z, partial x) = frac(gamma m pi, k_c^2 a) H_(m n) sin(frac(m pi, a) x) cos(frac(n pi, b) y) \
-        H_y &= -frac(gamma, k_c^2) frac(partial H_z, partial y) = frac(gamma n pi, k_c^2 b) H_(m n) cos(frac(m pi, a) x) sin(frac(n pi, b) y)
+        arrow(H)_(t) & = hat(x)H_(x) + hat(y)H_(y) \
+               H_(x) & = frac(gamma, k_(c)^2)H_("mn") frac(m pi, a)sin(frac(m pi, a) x) cos(frac(n pi, b)y) \
+               H_(y) & = frac(gamma, k_(c)^2)H_("mn") frac(n pi, b)cos(frac(m pi, a) x) sin(frac(n pi, b)y) \
+        arrow(E)_(t) & = hat(x)E_(x) + hat(y)E_(y) \
+               E_(x) & = - frac(j omega mu, k_(c)^2)H_("mn") frac(m pi, a)sin(frac(m pi, a) x) cos(frac(n pi, b)y) \
+               E_(y) & = frac(j omega mu, k_(c)^2)H_("mn") frac(n pi, b)cos(frac(m pi, a) x) sin(frac(n pi, b)y) \
       $
     ],
   )
 
-  #sub-question(
-    [
-      (c) The waveguide in Fig. Q3(b) is the "WR-430" designed for applications in the "R band" (1.70 - 2.60 GHz) and has the cross-section dimensions given in Table 3(c). (8 marks)
-      $
-        "inner dimension" & : quad a_i = 109.22 " mm", quad b_i = 54.61 " mm" \
-        "outer dimension" & : quad a_o = 113.28 " mm", quad b_o = 58.67 " mm"
-      $
-      (i) Determine the cut-off frequencies of the "TEM", $"TE"_(10)$, $"TE"_(01)$, and $"TE"_(20)$ modes. \
-      (ii) Obtain the highest frequency theoretically allowable for single-mode operation hence determine the reduction in the usable bandwidth the "WR-430" specification presents. \
-      (iii) Comment on the $"TE"_(01)$ and $"TE"_(20)$ modes in the guide.
+  #sub-question-group(
+    lead: [
+      The waveguide in @rect-guide is the WR-430 designed for applications in the R band (1.70 - 2.60 GHz) and has the cross-section dimensions given in @rect-guide-dim.
+      #align(center)[
+        #figure(
+          table(
+            columns: 2,
+            "inner dimension", "outer dimension",
+            [$a_i = 109.22 " mm"$], [$a_o = 113.28 " mm"$],
+            [$b_i = 54.61 " mm"$], [$b_o = 58.67 " mm"$],
+          ),
+          caption: "",
+        )<rect-guide-dim>
+      ]
     ],
-    answer: answer-box()[
-      #text(weight: "bold")[Part (i): Cut-off frequencies]
+    sq => [
+      #sq(
+        [Determine the cut-off frequencies of the TEM, $"TE"_(10)$, $"TE"_(01)$, and $"TE"_(20)$ modes.],
+        answer: answer-box()[
+          The expression for cut-off frequencies in a rectangular waveguide is given as:
+          $
+            f_(c) = frac(c, 2a) sqrt(m^2 + (frac(n a, b))^2)
+          $
+          The TEM does not propagate in this wave guide.
 
-      The cut-off frequency for a $"TE"_(m n)$ mode in a rectangular waveguide is given by:
-      $
-        f_("c," m n) = frac(c, 2) sqrt((frac(m, a))^2 + (frac(n, b))^2)
-      $
-      Using the inner dimensions $a = 109.22 " mm" = 0.10922 " m"$ and $b = 54.61 " mm" = 0.05461 " m"$, and $c = 3 times 10^8 " m/s"$:
+          For $"TE"_(10)$:
+          $
+            f_(c) & = frac(3 times 10^(8), 2 times 109.22 times 10^(-3)) \
+                  & = #fmt((3e8 / (2 * 109.22e-3)) * 1e-9) "GHz"
+          $
 
-      *For the "TEM" mode:*
-      A hollow rectangular waveguide cannot support a "TEM" mode. Therefore, the "TEM" cut-off frequency is undefined (or infinity).
+          For $"TE"_(01)$:
+          $
+            f_(c) & = frac(3 times 10^(8), 2 times 109.22 times 10^(-3)) times frac(109.22, 54.61) \
+                  & = #fmt((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) * 1e-9) "GHz"
+          $
 
-      *For the $"TE"_(10)$ mode ($m=1, n=0$):*
-      $
-        f_("c,10") = frac(c, 2a) = frac(3 times 10^8, 2 times 0.10922) = 1.373 " GHz"
-      $
+          For $"TE"_(20)$:
+          $
+            f_(c) & = frac(3 times 10^(8), 2 times 109.22 times 10^(-3)) times 2 \
+                  & = #fmt((3e8 / (2 * 109.22e-3)) * 2 * 1e-9) "GHz"
+          $
+        ],
+      )
 
-      *For the $"TE"_(01)$ mode ($m=0, n=1$):*
-      $
-        f_("c,01") = frac(c, 2b) = frac(3 times 10^8, 2 times 0.05461) = 2.747 " GHz"
-      $
+      #sq(
+        [Obtain the highest frequency theoretically allowable for single-mode operation hence determine the reduction in the usable bandwidth the WR-430 specification presents.],
+        answer: answer-box()[
+          The highest frequency theoretically allowable in this waveguide for single mode operation is #fmt((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) * 1e-9) GHz which is the cut-off for the next higher mode above the dominant $"TE"_(10)$ mode.
 
-      *For the $"TE"_(20)$ mode ($m=2, n=0$):*
-      $
-        f_("c,20") = frac(2c, 2a) = frac(c, a) = frac(3 times 10^8, 0.10922) = 2.746 " GHz"
-      $
+          The wave guide however operates between 1.70 and 2.60 GHz giving a bandwidth of #fmt(2.60 - 1.70) GHz, the max theoretical bandwidth is #fmt(((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) - (3e8 / (2 * 109.22e-3))) * 1e-9) GHz the reduction in usable bandwidth is hence:
+          $
+            "% reduction" &= frac(#fmt(((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) - (3e8 / (2 * 109.22e-3))) * 1e-9) - #fmt(2.60 - 1.70), #fmt(((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) - (3e8 / (2 * 109.22e-3))) * 1e-9)) times 100
+            &= #fmt((((((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) - (3e8 / (2 * 109.22e-3))) * 1e-9) - (2.60 - 1.70)) / (((3e8 / (2 * 109.22e-3)) * (109.22 / 54.61) - (3e8 / (2 * 109.22e-3))) * 1e-9)) * 100)\%
+          $
 
-      #text(weight: "bold")[Part (ii): Single-mode operation and bandwidth reduction]
+        ],
+      )
 
-      The dominant mode is $"TE"_(10)$ with $f_("c,10") = 1.373 " GHz"$.
-      The next higher-order modes are $"TE"_(20)$ and $"TE"_(01)$, both with cut-off frequencies around $2.746 " GHz"$.
-      For single-mode operation, the guide must operate strictly between $1.373 " GHz"$ and $2.746 " GHz"$.
-
-      The theoretical single-mode bandwidth is:
-      $
-        Delta f_"theoretical" = 2.746 - 1.373 = 1.373 " GHz"
-      $
-
-      The usable bandwidth specified for the "WR-430" ("R band") is:
-      $
-        Delta f_"usable" = 2.60 - 1.70 = 0.90 " GHz"
-      $
-
-      The reduction in usable bandwidth is:
-      $
-        "Reduction" = Delta f_"theoretical" - Delta f_"usable" = 1.373 - 0.90 = 0.473 " GHz"
-      $
-      This represents a percentage reduction of $frac(0.473, 1.373) times 100% tilde.op 34.4%$.
-
-      #text(weight: "bold")[Part (iii): Comment on $"TE"_(01)$ and $"TE"_(20)$ modes]
-
-      The $"TE"_(01)$ and $"TE"_(20)$ modes have almost identical cut-off frequencies ($2.747 " GHz"$ and $2.746 " GHz"$ respectively). This is because the inner dimensions satisfy $a_i tilde.op 2 b_i$ ($109.22 " mm" tilde.op 2 times 54.61 " mm"$).
-      When $a = 2b$, the propagation constant for $"TE"_(01)$ is $k_c = pi/b = 2pi/a$, which is exactly the same as for $"TE"_(20)$ ($k_c = 2pi/a$).
-      Therefore, these two modes are **degenerate**. They will reach their cut-off frequencies at essentially the same operating frequency, which limits the single-mode bandwidth of the guide.
+      #sq(
+        [Comment on the $"TE"_(01)$ and $"TE"_(20)$ modes in the guide.],
+        answer: answer-box()[
+          The cut-off frequencies for $"TE"_(01)$ and $"TE"_(20)$ modes are equal due to the aspect ratio of the guide $a_(i) = 2 b_(i)$ which makes the $"TE"_(01)$ and $"TE"_(20)$ modes degenerate modes
+        ],
+      )
     ],
   )
 ]
 
-#numed-question()[
+#numed-question(
+  lead: [For a $"TE"_1$ mode propagating in a parallel-plate transmission line in the $z$-direction, use the cosine time reference function and],
+)[
+
   #sub-question(
-    [
-      For a $"TE"_1$ mode propagating in a parallel-plate transmission line in the $z$-direction:
-      (i) Write down the instantaneous field expressions.
-      (ii) In a typical $Y$ plane, sketch the field lines.
-      Use the cosine time reference function.
-    ],
+    [Write down the instantaneous field expressions.],
     answer: answer-box()[
-      #text(weight: "bold")[Part (i): Instantaneous field expressions]
-
-      Using a cosine time reference function:
+      A bit of context we had just found the expressions for a TE mode in a parallel plate wave-guide eg $H_(z)(y) = H_(n)cos(frac(n pi, b)y)$.
+      So we start with the expression for $H_(z)(y, z, t)$ as:
       $
-        H_z(y, z, t) & = cal(R)e[H_z exp{j(omega t - beta z)}] \
-                     & = H_1 cos(frac(pi, b) y) cos(omega t - beta z)
+        H_(z)(y, z, t) & = Re(H_(z)(y) exp{j(omega t - beta z)}) \
+                       & = H_(1) cos(frac(pi, b)y) cos(omega t - beta z)
       $
+      We had seen that $arrow(H)_(t)(x, y) = hat(y)H_(y)(y)$ and $arrow(E)_(t)(x, y) = hat(x)E_(x)(y)$ and:
       $
-        H_y(y, z, t) & = cal(R)e[H_y exp{j(omega t - beta z)}] \
-                     & = -beta frac(b, pi) H_1 sin(frac(pi, b) y) sin(omega t - beta z)
-      $
-      $
-        E_x(y, z, t) & = cal(R)e[E_x exp{j(omega t - beta z)}] \
-                     & = -omega mu frac(b, pi) H_1 sin(frac(pi, b) y) sin(omega t - beta z)
-      $
-      $arrow(E)_t$ is hence everywhere normal to the $y z$-plane while $arrow(H)$ lines in this plane will have a slope:
-      $
-        frac(dif y, dif z) = frac(H_y, H_z)
+        arrow(H)_(t) & = - frac(gamma, k_(c)^2) nabla_(t)H_(z) \
+        arrow(E)_(t) & = frac(j omega mu, k_(c)^2) hat(z) times nabla_(t) H_(z)
       $
 
-      #text(weight: "bold")[Part (ii): Sketch of field lines in a typical Y plane]
+      Since $H_(z)$ only varies with $y$:
+      $
+        nabla_(t)H_(z) & = hat(y) frac(partial H_(z), partial y) \
+                       & = - hat(y) pi/b H_(1) sin(pi/b y)
+      $
 
-      At $t = 0$:
+      Thus:
       $
-        frac(dif y, dif z) = frac(H_y (y, z, 0), H_z (y, z, 0)) = frac(beta frac(b, pi) sin(frac(pi, b) y) sin(beta z), cos(frac(pi, b) y) cos(beta z))
+        H_(y) = - frac(gamma, k_(c)^2) frac(partial H_(z), partial y) \
       $
-      Separating variables:
-      $
-        frac(cos(frac(pi, b) y) dif y, frac(b, pi) sin(frac(pi, b) y)) = frac(beta sin(beta z) dif z, cos(beta z)) arrow.double frac(frac(pi, b) cos(frac(pi, b) y) dif y, sin(frac(pi, b) y)) = frac(beta sin(beta z) dif z, cos(beta z))
-      $
-      $
-        frac(dif (sin(frac(pi, b) y)), sin(frac(pi, b) y)) = - frac(dif (cos(beta z)), cos(beta z))
-      $
-      $
-        ln(sin(frac(pi, b) y)) = -ln(cos(beta z)) + C_("TE")
-      $
-      #text(weight: "bold")[Field line characteristics:]
-      - Magnetic Field Loops ($H$): Form closed loops centered around $y/b = 1/2$ and $z = pi/(2 beta), 3 pi/(2 beta), dots.c$
-      - Electric Field Intensity ($E$): Reaches maximum amplitude at $y/b = 1/2$ and alternates direction between $+x$ and $-x$ every half guide wavelength ($lambda_g / 2$).
 
-      #figure(
-        rect(width: 10cm, height: 4cm)[Placeholder for TE1 field lines sketch],
-        caption: [Field lines in a typical Y plane],
-      )
+      For lossless media $gamma = j beta$ also $k_(c) = frac(n pi, b)$ in this case $n = 1$ which means $k_(c) = pi/b$:
+      $
+        H_(y) & = frac(j beta, (frac(pi, b))^2) pi/b H_(1) sin(pi/b y) \
+              & = frac(j beta b, pi) H_1 sin(frac(pi, b)y)
+      $
+      Similarly:
+      $
+        E_(x) & = - frac(j omega mu, k_(c)^2) frac(partial H_(z), partial y) \
+              & = frac(j omega mu b, pi) H_(1) sin(frac(pi, b)y)
+      $
+
+      Next:
+      $
+        H_(y)(y,z,t) & = Re(frac(j beta b, pi) H_1 sin(frac(pi, b)y)exp{j(omega t - beta z)}) \
+                     & = Re(frac(beta b, pi) H_1 sin(frac(pi, b)y)j exp{j(omega t - beta z)})
+      $
+      $Re(j exp(j theta)) = cos(theta + pi/2) = - sin theta$ hence:
+      $
+        H_(y)(y,z,t) & = -beta frac(b, pi) H_1 sin(frac(pi, b)y) sin(omega t - beta z) \
+        E_(x)(y,z,t) & = - omega mu frac(b, pi) H_1 sin(frac(pi, b)y) sin(omega t - beta z)
+      $
+
+      Since $arrow(E)_(t) = hat(x)E_(x)(y)$ it is normal to the $y z$ plane everywhere.
+
+      Let's define a tiny step along a magnetic field line as $dif arrow(l) = hat(y) dif y + hat(z) dif z$.
+      For this tiny step to be tangent to the magnetic field vector $arrow(H) = hat(y) H_(y) + hat(z) H_(z)$ the ratio of their components must be equal:
+      $
+        frac(dif y, dif z) = frac(H_(y), H_(z))
+      $
     ],
   )
 
+  #sub-question(
+    [In a typical $Y$ plane, sketch the field lines.],
+    answer: answer-box()[
+      At t = 0:
+      $
+        frac(dif y, dif z) & = frac(H_(y)(y,z,0), H_(z)(y,z,0)) \
+                           & = frac(beta frac(b, pi) H_1 sin(frac(pi, b)y) sin(beta z), H_(1) cos(frac(pi, b)y) cos(beta z))
+      $
+
+      Separating variables:
+      $
+        frac(cos(frac(pi, b)y) dif y, frac(b, pi) sin(frac(pi, b)y)) & = frac(beta sin(beta z) dif z, cos (beta z)) \
+                    frac(dif (sin(frac(pi, b)y)), sin(frac(pi, b)y)) & = - frac(dif (cos(beta z)), cos (beta z)) \
+             ln lr(|sin(frac(pi, b)y)|) = ln|cos(beta z)| + C_("TE")
+      $
+
+      #let e-into(pos, radius: 0.14) = {
+        import draw: *
+        let d = radius * 0.65
+        circle(pos, radius: radius, fill: white, stroke: 0.7pt + black)
+        line((pos.at(0) - d, pos.at(1) - d), (pos.at(0) + d, pos.at(1) + d), stroke: 0.7pt + black)
+        line((pos.at(0) - d, pos.at(1) + d), (pos.at(0) + d, pos.at(1) - d), stroke: 0.7pt + black)
+      }
+
+      #let e-out(pos, radius: 0.14) = {
+        import draw: *
+        circle(pos, radius: radius, fill: white, stroke: 0.7pt + black)
+        circle(pos, radius: radius * 0.25, fill: black, stroke: none)
+      }
+      // Helper: arrowhead at angle t on an ellipse centered (cx, cy), direction = +1 (CCW) or -1 (CW)
+      #let ell-arrow(cx, cy, rx, ry, t, dir: 1) = {
+        let p = (cx + rx * calc.cos(t), cy + ry * calc.sin(t))
+        // tangent for CCW motion: (-rx sin t, ry cos t)
+        let d = (
+          -dir * rx * calc.sin(t),
+          dir * ry * calc.cos(t),
+        )
+        let n = calc.sqrt(d.at(0) * d.at(0) + d.at(1) * d.at(1))
+        let eps = 0.01
+        draw.mark(
+          p,
+          (p.at(0) + eps * d.at(0) / n, p.at(1) + eps * d.at(1) / n),
+          symbol: ">",
+          fill: black,
+          stroke: black,
+          scale: 0.8,
+        )
+      }
+
+      #align(center)[
+        #figure(
+          canvas({
+            import draw: *
+
+            let pi-x = 5.0
+            let y-top = 3.4
+            let z-max = 2.5 * pi-x // 5.0
+            let rx = (pi-x / 2) - 0.15
+            let ry = y-top / 4
+            let cy = y-top / 2
+
+            // Top plate (y/b = 1)
+            line((0, y-top), (pi-x + 5.3, y-top), stroke: 0.9pt + black)
+
+            // Vertical dashed reference lines at pi/2, pi, 3pi/2
+            for x in (0.5 * pi-x, pi-x, 1.5 * pi-x) {
+              line((x, 0), (x, y-top), stroke: (paint: black, thickness: 0.6pt, dash: "dashed"))
+            }
+
+            // Horizontal axis (beta z) and vertical axis (y/b)
+            line((0, 0), (pi-x + 5.5, 0), stroke: 0.9pt + black, mark: (end: "stealth", fill: black))
+            line((0, 0.), (0, y-top + 0.45), stroke: 0.9pt + black, mark: (end: "stealth", fill: black))
+
+            // Axis ticks and labels
+            line((-0.07, y-top), (0.07, y-top), stroke: 0.8pt + black)
+            content((-0.25, y-top), [$1$])
+            content((-0.25, 0.05), [$0$])
+            content((0, y-top + 0.68), [$y/b$])
+            content((pi-x + 5.72, 0), [$beta z$])
+
+            for (x, lbl) in (
+              (0.5 * pi-x, [$pi / 2$]),
+              (pi-x, [$pi$]),
+              (1.5 * pi-x, [$(3 pi) / 2$]),
+            ) {
+              line((x, -0.07), (x, 0.07), stroke: 0.8pt + black)
+              content((x, -0.35), lbl)
+            }
+
+            // Origin marker ("x" label near bottom-left)
+            e-into((0, 0), radius: 0.15)
+            content((-0.18, -0.28), [x])
+
+            // Left half-ellipse (center (0, cy), drawn 90deg -> -90deg, i.e. clockwise)
+            arc(
+              (0, cy + ry),
+              start: 90deg,
+              stop: -90deg,
+              radius: (rx, ry),
+              stroke: (paint: black, thickness: 0.85pt, dash: "dashed"),
+            )
+            ell-arrow(0, cy, rx, ry, 50deg)
+
+            // Central ellipse centered at beta*z = pi (plain circle, no marks)
+            circle(
+              (pi-x, cy),
+              radius: (rx, ry),
+              stroke: (paint: black, thickness: 0.85pt, dash: "dashed"),
+            )
+            ell-arrow(pi-x, cy, rx, ry, 90deg) // top, pointing left (CCW)
+            ell-arrow(pi-x, cy, rx, ry, 270deg) // bottom, pointing right (CCW)
+
+            // Right half-ellipse (center (2*pi - x, cy), drawn 270deg -> 90deg, CCW)
+            arc(
+              (2 * pi-x, ry),
+              start: 270deg,
+              stop: 90deg,
+              radius: (rx, ry),
+              stroke: (paint: black, thickness: 0.85pt, dash: "dashed"),
+            )
+            ell-arrow(2 * pi-x, cy, rx, ry, 120deg)
+
+            // Cross cluster around beta*z = pi/2
+            let cx1 = 0.5 * pi-x
+            for pt in ((cx1, cy), (cx1 - 0.32, cy), (cx1 + 0.32, cy), (cx1, cy + 0.34), (cx1, cy - 0.34)) {
+              e-into(pt)
+            }
+
+            // Dot cluster around beta*z = 3pi/2
+            let cx2 = 1.5 * pi-x
+            for pt in ((cx2, cy), (cx2 - 0.32, cy), (cx2 + 0.32, cy), (cx2, cy + 0.34), (cx2, cy - 0.34)) {
+              e-out(pt)
+            }
+          }),
+        )
+      ]
+    ],
+  )
+]
+
+
+= DeepSeek
+// #numed-question()[
+//   #sub-question(
+//     [],
+//     answer: answer-box()[
+//
+//       #text(weight: "bold")[Part (iii): Attenuation Constant for $"TM"_n$ Modes]
+//
+//       The attenuation constant $alpha_c$ due to conductor loss is given by $alpha_c = frac(P_L, 2P)$, where $P_L$ is the power lost per unit length in the plates, and $P$ is the total power flowing down the guide.
+//
+//       Using the fields from Part (i), the time-averaged power flow is:
+//       $
+//         P = frac(1, 2) "Re" integral_0^b integral_0^W (-E_y H_x^*) dif x dif y = frac(W beta omega epsilon, 2 k_c^2) B^2 integral_0^b cos^2(k_c y) dif y = frac(W beta omega epsilon b, 4 k_c^2) B^2
+//       $
+//       The power lost per unit length in both plates (each with surface resistance $R_s = sqrt(omega mu_0 / (2 sigma))$) is:
+//       $
+//         P_L = R_s integral_0^W |J_s(y=0)|^2 dif x + R_s integral_0^W |J_s(y=b)|^2 dif x
+//       $
+//       Since $|J_s|^2 = (frac(omega epsilon, k_c) B)^2$ on both plates:
+//       $
+//         P_L = 2 R_s W (frac(omega epsilon, k_c) B)^2
+//       $
+//       Substituting into $alpha_c = frac(P_L, 2P)$:
+//       $
+//         alpha_c &= frac(2 R_s W frac(omega^2 epsilon^2, k_c^2) B^2, 2 frac(W beta omega epsilon b, 4 k_c^2) B^2) = frac(2 R_s omega^2 epsilon^2, 2 beta omega epsilon b / 4) = frac(4 R_s omega epsilon, beta b)
+//       $
+//       Multiply numerator and denominator by $eta = sqrt(mu/epsilon)$:
+//       $
+//         alpha_c = frac(4 R_s, b eta) frac(omega sqrt(mu epsilon), beta) = frac(4 R_s, b eta) frac(k, beta) = frac(4 R_s, b eta) frac(1, sqrt(1 - (f_c/f)^2))}
+//       $
+//       *(Note: A factor of 2 can appear depending on whether the top plate is counted differently, but the functional dependence is what matters).*
+//
+//       As a function of $f/f_{"cn"}$, let $x = f/f_{"cn"}$:
+//       $
+//         alpha_c(x) = frac(4 R_s, b eta) frac(1, sqrt(1 - 1/x^2)) = frac(4 R_s, b eta) frac(x, sqrt(x^2 - 1))
+//       $
+//       To find the minimum, we take the derivative with respect to $x$ and set it to zero. The function $frac(x, sqrt(x^2-1))$ is monotonically decreasing for $x > 1$. Therefore, the attenuation constant does not have a finite minimum; it approaches zero as $x arrow.r.double infinity$ (i.e., $f arrow.r.double infinity$).
+//
+//       (Exam Note: If the question intended to ask for TE modes, the attenuation function is $alpha_c prop frac(1, x^2 sqrt(1 - 1/x^2))$. Differentiating this yields a minimum exactly at $f/f_{"cn"} = sqrt(3) tilde.op 1.732$. Since the question explicitly states TM modes, the theoretical minimum is at $f/f_{"cn"} arrow.r.double infinity$)
+//     ],
+//   )
+// ]
+
+#numed-question()[
   #sub-question(
     [
       Determine the current and charge on the plates of a parallel plate transmission line assuming perfectly conducting plates for a general $"TM"_n$ and $"TE"_n$ modes.
