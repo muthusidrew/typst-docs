@@ -1317,7 +1317,9 @@
       $
         frac(cos(frac(pi, b)y) dif y, frac(b, pi) sin(frac(pi, b)y)) & = frac(beta sin(beta z) dif z, cos (beta z)) \
                     frac(dif (sin(frac(pi, b)y)), sin(frac(pi, b)y)) & = - frac(dif (cos(beta z)), cos (beta z)) \
-             ln lr(|sin(frac(pi, b)y)|) = ln|cos(beta z)| + C_("TE")
+                                          ln lr(|sin(frac(pi, b)y)|) & = - ln|cos(beta z)| + C_("TE") \
+                                        sin(frac(pi, b)y)cos(beta z) & = e^(C_("TE")) \
+                                                                     & = K
       $
 
       #let e-into(pos, radius: 0.14) = {
@@ -1762,3 +1764,131 @@ $
   E_z = 0 quad "at the walls"
 $
 2. (For the transverse fields to not blow up, this automatically forces the boundary conditions on $H_t$).
+
+
+#let e-into(pos, radius: 0.14) = {
+  import draw: *
+  let d = radius * 0.65
+  circle(pos, radius: radius, fill: white, stroke: 0.7pt + black)
+  line((pos.at(0) - d, pos.at(1) - d), (pos.at(0) + d, pos.at(1) + d), stroke: 0.7pt + black)
+  line((pos.at(0) - d, pos.at(1) + d), (pos.at(0) + d, pos.at(1) - d), stroke: 0.7pt + black)
+}
+
+#let e-out(pos, radius: 0.14) = {
+  import draw: *
+  circle(pos, radius: radius, fill: white, stroke: 0.7pt + black)
+  circle(pos, radius: radius * 0.25, fill: black, stroke: none)
+}
+
+#align(center)[
+  #figure(
+    canvas({
+      import draw: *
+
+      let pi-x = 5.0
+      let y-top = 3.4
+      let cy = y-top / 2
+
+      // Top plate (y/b = 1)
+      line((0, y-top), (pi-x + 5.3, y-top), stroke: 0.9pt + black)
+
+      // Vertical dashed reference lines at pi/2, pi, 3pi/2
+      for x in (0.5 * pi-x, pi-x, 1.5 * pi-x) {
+        line((x, 0), (x, y-top), stroke: (paint: black, thickness: 0.6pt, dash: "dashed"))
+      }
+
+      // Horizontal axis (beta z) and vertical axis (y/b)
+      line((0, 0), (pi-x + 5.5, 0), stroke: 0.9pt + black, mark: (end: "stealth", fill: black))
+      line((0, 0.), (0, y-top + 0.45), stroke: 0.9pt + black, mark: (end: "stealth", fill: black))
+
+      // Axis ticks and labels
+      line((-0.07, y-top), (0.07, y-top), stroke: 0.8pt + black)
+      content((-0.25, y-top), [$1$])
+      content((-0.25, 0.05), [$0$])
+      content((0, y-top + 0.68), [$y/b$])
+      content((pi-x + 5.72, 0), [$beta z$])
+
+      for (x, lbl) in (
+        (0.5 * pi-x, [$pi / 2$]),
+        (pi-x, [$pi$]),
+        (1.5 * pi-x, [$(3 pi) / 2$]),
+      ) {
+        line((x, -0.07), (x, 0.07), stroke: 0.8pt + black)
+        content((x, -0.35), lbl)
+      }
+
+      // Origin marker ("x" label near bottom-left)
+      e-into((0, 0), radius: 0.15)
+      content((-0.18, -0.28), [x])
+
+      // x-units per radian of beta*z
+      let sx = pi-x / calc.pi
+
+      // Arrowhead at pts[i], pointing toward pts[i+1]
+      let arrow-at(pts, i) = {
+        mark(
+          pts.at(i),
+          pts.at(i + 1),
+          symbol: ">",
+          fill: black,
+          stroke: black,
+          scale: 0.8,
+          anchor: "center",
+        )
+      }
+
+      // One cell of sin(pi y/b) |cos(beta z)| = K, centered at beta*z = c (radians)
+      // part: "full", "right" (center at 0, clipped at z=0), "left" (center at 2pi, clipped at z-max)
+      // dir: 1 = counterclockwise, -1 = clockwise
+      let draw-cell(c, K, part: "full", dir: 1) = {
+        let N = 80
+        let y0 = (calc.asin(K) / 1rad) / calc.pi // where sin(pi y) = K, loop tips
+        let right = ()
+        let left = ()
+        for i in range(N + 1) {
+          let t = i / N
+          // cosine spacing clusters points near the tips, where the curve is steep
+          let y = y0 + (1 - 2 * y0) * (1 - calc.cos(calc.pi * t)) / 2
+          let s = calc.sin(calc.pi * y)
+          let dz = calc.acos(calc.min(1.0, K / s)) / 1rad
+          right.push(((c + dz) * sx, y * y-top))
+          left.push(((c - dz) * sx, y * y-top))
+        }
+        // right side goes bottom -> top, left side reversed goes top -> bottom (CCW)
+        let pts = if part == "full" { right + left.rev() } else if part == "right" { right } else { left.rev() }
+        if dir == -1 { pts = pts.rev() }
+
+        let stroke = (paint: black, thickness: 0.7pt, dash: "dashed")
+        line(..pts, close: part == "full", stroke: stroke)
+
+        // Arrows at the widest points of the loop
+        let h = calc.quo(N, 2)
+        if part == "full" {
+          arrow-at(pts, h)
+          arrow-at(pts, N + 1 + h)
+        } else {
+          arrow-at(pts, h)
+        }
+      }
+
+      // Nested contours: larger K gives smaller loops
+      for k in (0.1, 0.2, 0.3, 0.5, 0.8) {
+        draw-cell(0, k, part: "right", dir: -1) // half cell at beta*z = 0
+        draw-cell(calc.pi, k, part: "full", dir: 1) // full cell at beta*z = pi
+        draw-cell(2 * calc.pi, k, part: "left", dir: -1) // half cell at beta*z = 2pi
+      }
+
+      // Cross cluster around beta*z = pi/2
+      let cx1 = 0.5 * pi-x
+      for pt in ((cx1, cy), (cx1 - 0.32, cy), (cx1 + 0.32, cy), (cx1, cy + 0.34), (cx1, cy - 0.34)) {
+        e-into(pt)
+      }
+
+      // Dot cluster around beta*z = 3pi/2
+      let cx2 = 1.5 * pi-x
+      for pt in ((cx2, cy), (cx2 - 0.32, cy), (cx2 + 0.32, cy), (cx2, cy + 0.34), (cx2, cy - 0.34)) {
+        e-out(pt)
+      }
+    }),
+  )
+]
