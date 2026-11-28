@@ -854,57 +854,86 @@
 = Exercise 3
 
 #numed-question(
-  lead: [The PDF of a continuous random variable X is given by
+  lead: [The PDF of a continuous random variable $X$ is given by
     $
       f(x) = cases(
         C/sqrt(x)"," & 0 <= x <= 4,
         "0," & "elsewhere"
       )
     $
-    Find the value of the constant C, the CDF of X and $P(X >= 1)$.],
+    Find:
+  ],
 )[
-  #answer-box()
+  #sub-question(
+    [The value of the constant $C$],
+    answer: answer-box()[
+      $
+        1 & = C integral_(0)^(4) frac(1, sqrt(x)) dif x \
+          & = 2C lr(sqrt(x)|)_(0)^(4) \
+          & = 4 C \
+        C & = 1/4
+      $
+    ],
+  )
+
+  #sub-question(
+    [The CDF of $X$ and $P(X >= 1)$.],
+    answer: answer-box()[
+
+    ],
+  )
 ]
 
 #numed-question(
-  lead: [The PDF of a random variable X is given by
+  lead: [The PDF of a random variable $X$ is given by
     $
       g(x) = cases(
         k x (1 - x)"," & 0 <= x <= 1,
         "0," & "elsewhere"
       )
     $
-    Find the value of the constant k, the CDF of X and the value of m such that $G(x) = 1/2$.],
+    Find:
+  ],
 )[
-  #answer-box()
+  #sub-question(
+    [The value of the constant $k$.],
+    answer: answer-box()[
+
+    ],
+  )
+
+  #sub-question(
+    [The CDF of $X$ and the value of $m$ such that $G(x) = 1/2$.],
+    answer: answer-box()[
+
+    ],
+  )
 ]
 
 #numed-question(
   lead: [Find the CDF of a random variable Y whose PDF is given by;],
 )[
-  #sub-question-group()[
-    #sub-question(
-      $
-        f(x) = cases(
-          1/3",", & 0 <= x <= 1,
-          1/3",", & 2 <= x <= 4,
-          "0,", & "elsewhere"
-        )
-      $,
-      answer: [#answer-box()],
-    )
-    #sub-question(
-      $
-        f(x) = cases(
-          1/2"," & 0 <= x <= 1, ,
-          1/2"," & 1 <= x <= 2, ,
-          (3-x)/2"," & 2 <= x <= 3, ,
-          "0," & "elsewhere"
-        )
-      $,
-      answer: [#answer-box()],
-    )
-  ]
+  #sub-question(
+    $
+      f(x) = cases(
+        1/3"," & 0 <= x <= 1,
+        1/3"," & 2 <= x <= 4,
+        "0," & "elsewhere"
+      )
+    $,
+    answer: [#answer-box()],
+  )
+  #sub-question(
+    $
+      f(x) = cases(
+        1/2"," & 0 <= x <= 1,
+        1/2"," & 1 <= x <= 2,
+        (3-x)/2"," & 2 <= x <= 3,
+        "0," & "elsewhere"
+      )
+    $,
+    answer: [#answer-box()],
+  )
 ]
 
 #numed-question(
