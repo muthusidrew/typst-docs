@@ -12,18 +12,17 @@
 //
 //   #numed-question()[
 //     #sub-question(
-//       [Parent question.],
-//       answer: answer-box()[Parent answer (optional).],
-//       children: sq => [
-//         #sq([Child 1.], answer: answer-box()[...])
-//         #sq(
-//           [Child 2.],
-//           children: sq => [
-//             #sq([Grandchild 2.1], answer: answer-box()[...])
-//             #sq([Grandchild 2.2], answer: answer-box()[...])
-//           ],
-//         )
+//       [A leaf sub-question.],
+//       answer: answer-box()[Optional answer.],
+//     )
+//
+//     #sub-question-group(
+//       sq => [
+//         #sq([First child.], answer: answer-box()[...])
+//         #sq([Second child.])
 //       ],
+//       lead: [Optional lead text; the group is numbered and its children
+//              nest one level deeper.],
 //     )
 //   ]
 // =====================================================================
@@ -36,6 +35,7 @@
 // so no state is needed.
 #let assignment(
   reg-no: "",
+  name: "",
   assignment-name: "",
   body,
 ) = {
@@ -71,6 +71,11 @@
       text(size: 11pt)[Registration Number]
       v(0.2cm)
       text(size: 16pt, weight: "bold")[#reg-no]
+    }
+    #if name != "" {
+      text(size: 11pt)[by]
+      v(0.2cm)
+      text(size: 16pt, weight: "bold")[#name]
     }
     #v(0.3cm)
     #text(size: 11pt)[Date]
@@ -125,6 +130,7 @@
 // Helpers
 // ---------------------------------------------------------------------
 // Number string at the *current* location, e.g. "2.1.3".
+// Must be called inside context
 #let subq-number() = {
   let q = question-counter.get().first()
   let s = subq-counter.get()
@@ -172,6 +178,9 @@
 //          If omitted, the group is invisible but still consumes a
 //          numbering slot.
 //   ref  : optional label for subq-ref(), pointing at the group itself.
+//   Only one level of group nesting is supported by the public API
+//   (sub-question-group = make-group(0); children are leaves from
+//   make-sq(1)). For deeper nesting, expose make-group(1) here.
 #let make-group(depth) = (body, lead: none, ref: none) => {
   subq-counter.step(level: depth + 1)
 
@@ -443,3 +452,6 @@
   (render-root(false), render-root(true))
 }
 
+#let fmt(c, d: 4) = {
+  str(calc.round(c, digits: d))
+}
